@@ -5,7 +5,11 @@ running = True
 PATH = Path("root-crawl/test_dungeon")
 DIR_LVL = 1
 
-
+class Enemy:
+    def __init__(self):
+        self.name = ""
+        self.health = 100
+        self.typ
 
 class Room:
     def __init__(self, path):
