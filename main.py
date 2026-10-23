@@ -1,5 +1,5 @@
 from pathlib import Path
-import os
+import os, time
 
 running = True
 
@@ -16,12 +16,26 @@ class Enemy:
         self.health = self.file_size * 0.1
         self.damage = 20
         self.typ = None
+        self.is_alive = True
+
+    def take_damage(self, amount):
+        self.health -= amount
+
+        if self.health <= 0:
+            self.is_alive = False
 
 class Player:
     def __init__(self, start_room):
         self.current_room = start_room
         self.health = 200
         self.damage = 20
+        self.is_alive = True
+
+    def take_damage(self, amount):
+                self.health -= amount
+                
+                if self.health <= 0:
+                    self.is_alive = False
 
 class Room:
     def __init__(self, path, parent=None, name=None):
@@ -43,34 +57,45 @@ class Room:
         for name in self.exits:
             print(f"[Exit]  {name}")
         for name in self.enemies:
-            print(f"[Enemy]  {name} HP: {self.enemies[name].health}")
+            if self.enemies[name].is_alive:
+                print(f"[Enemy]  {name} HP: {self.enemies[name].health}")
+
+
+def fight(player, enemy):
+    while player.is_alive and enemy.is_alive:
+        print(f"Player HP: {player.health} Enemy HP: {enemy.health}")
+        enemy.take_damage(player.damage)
+        player.take_damage(enemy.damage)
+        time.sleep(0.5)
 
 player= Player(Room(PATH, name="test_dungeon"))
 player.current_room
 
-while running:
-    player.current_room.draw_room()
-    player_command = input("What is your next move? ").split()
-    if not player_command:
-        continue
+if __name__ == "__main__":
+    while running:
+        player.current_room.draw_room()
+        player_command = input("What is your next move? ").split()
+        if not player_command:
+            continue
 
-    match player_command[0]:
-        case "go":
-            if len(player_command) > 1 and player_command[1] in player.current_room.exits:
-                player.current_room = player.current_room.exits[player_command[1]]
-                clear()
-                print(f"Entered {player_command[1]}:")
-            else:
-                print("That is not a valid exit.")
-        case "attack":
-            if len(player_command) > 1 and player_command[1] in player.current_room.enemies:
-                print(f"Attacking {player.current_room.enemies[player_command[1]].name}")
-            else:
-                print("That is not a valid attack.")
-        case "back":
-            if player.current_room.parent:
-                player.current_room = player.current_room.parent
-                clear()
-                print(f"Entered {player.current_room.name}")
-        case _:
-            print("That is not a valid command.")
+        match player_command[0]:
+            case "go":
+                if len(player_command) > 1 and player_command[1] in player.current_room.exits:
+                    player.current_room = player.current_room.exits[player_command[1]]
+                    clear()
+                    print(f"Entered {player_command[1]}:")
+                else:
+                    print("That is not a valid exit.")
+            case "attack":
+                if len(player_command) > 1 and player_command[1] in player.current_room.enemies:
+                    print(f"Attacking {player.current_room.enemies[player_command[1]].name}")
+                    fight(player, player.current_room.enemies[player_command[1]])
+                else:
+                    print("That is not a valid attack.")
+            case "back":
+                if player.current_room.parent:
+                    player.current_room = player.current_room.parent
+                    clear()
+                    print(f"Entered {player.current_room.name}")
+            case _:
+                print("That is not a valid command.")
