@@ -1,20 +1,23 @@
 from pathlib import Path
 
 
-pfad = Path("root-crawl/test_dungeon")
+PATH = Path("root-crawl/test_dungeon")
+
+DIR_LVL = 1
 
 
-ebene = 1
 def read_folder(path):
-   global pfad, ebene
-   print("|" * ebene, pfad)
+   global PATH, DIR_LVL
+   print("|" * DIR_LVL, PATH)
    for element in path.iterdir():
       if element.is_dir():
-        pfad = pfad / f"{element.name}"
-        ebene +=1
-        read_folder(pfad)
+        PATH = PATH / f"{element.name}"
+        DIR_LVL +=1
+        read_folder(PATH)
       elif element.is_file():
-        print("|" * ebene, "-", f"[DATEI]  {element.name}")
+        print("|" * DIR_LVL, "-", f"[DATEI]  {element.name}")
 
+def go_room(room):
+   pass
 
-read_folder(pfad)
+read_folder(PATH)
