@@ -1,9 +1,13 @@
 from pathlib import Path
+import os
 
 running = True
 
 PATH = Path("root-crawl/test_dungeon")
 DIR_LVL = 1
+
+def clear():
+    os.system("cls" if os.name == "nt" else "clear")
 
 class Enemy:
     def __init__(self, name):
@@ -46,6 +50,7 @@ while running:
             if player_command[1] in current_player_room.exits:
                 print("Betrete den nächsten Raum:")
                 current_player_room = current_player_room.exits[player_command[1]]
+                clear()
             else:
                 print("Das ist kein gültiger Ausgang.")
         case _:
