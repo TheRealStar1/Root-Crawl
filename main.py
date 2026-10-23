@@ -26,9 +26,9 @@ class Room:
     def draw_room(self):
         for element in self.path.iterdir():
             if element.is_dir():
-                print(f"[ODNER]  {element.name}")
+                print(f"[Ausgang]  {element.name}")
             elif element.is_file():
-                print(f"[DATEI]  {element.name}")
+                print(f"[Gegner]  {element.name}")
 
 current_player_room = Room(PATH)
 
@@ -37,6 +37,11 @@ while running:
    player_command = input("Was ist ihr nächster Zug?:")
    player_command = player_command.split()
    match player_command[0]:
-      case "gehe":
-        if player_command[1] in current_player_room.exits:
-            current_player_room = current_player_room.exits[player_command[1]]
+        case "gehe":
+            if player_command[1] in current_player_room.exits:
+                print("Betrete den nächsten Raum:")
+                current_player_room = current_player_room.exits[player_command[1]]
+            else:
+                print("Das ist kein gültiger Ausgang.")
+        case _:
+           print("Das ist kein gültiger Befehl.")
