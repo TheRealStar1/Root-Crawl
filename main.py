@@ -35,28 +35,31 @@ class Room:
     def draw_room(self):
         for element in self.path.iterdir():
             if element.is_dir():
-                print(f"[Ausgang]  {element.name}")
+                print(f"[Exit]  {element.name}")
             elif element.is_file():
-                print(f"[Gegner]  {element.name}")
+                print(f"[Enemy]  {element.name}")
 
 current_player_room = Room(PATH)
 
 while running:
    current_player_room.draw_room()
-   player_command = input("Was ist ihr nächster Zug?:")
+   player_command = input("What is your next move? ")
    player_command = player_command.split()
+   if not player_command:
+       continue
+
    match player_command[0]:
-        case "gehe":
-            if player_command[1] in current_player_room.exits:
-                print("Betrete den nächsten Raum:")
+        case "go":
+            if len(player_command) > 1 and player_command[1] in current_player_room.exits:
+                print("Entering the next room:")
                 current_player_room = current_player_room.exits[player_command[1]]
                 clear()
             else:
-                print("Das ist kein gültiger Ausgang.")
-        case "angreifen":
-            if player_command[1] in current_player_room.enemies:
-               print(f"Greife {current_player_room.enemies[player_command[1]].name} an")
+                print("That is not a valid exit.")
+        case "attack":
+            if len(player_command) > 1 and player_command[1] in current_player_room.enemies:
+               print(f"Attacking {current_player_room.enemies[player_command[1]].name}")
             else:
-                print("Das ist kein gültiger Angriff.")
+                print("That is not a valid attack.")
         case _:
-           print("Das ist kein gültiger Befehl.")
+           print("That is not a valid command.")
