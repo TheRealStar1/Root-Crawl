@@ -18,7 +18,7 @@ A text-based dungeon crawler that runs in your terminal. Folders are rooms, file
 ## Run it
 
 ```bash
-git clone https://github.com/<your-name>/root-crawl.git
+git clone https://github.com/TheRealStar1/root-crawl.git
 cd root-crawl
 python main.py
 ```
