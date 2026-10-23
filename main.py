@@ -5,38 +5,38 @@ running = True
 PATH = Path("root-crawl/test_dungeon")
 DIR_LVL = 1
 
-current_player_room = PATH
 
 
-def tree(path):
-   global DIR_LVL
-   print("|" * DIR_LVL, path)
-   for element in path.iterdir():
-      if element.is_dir():
-        path = path / f"{element.name}"
-        DIR_LVL +=1
-        tree(path)
-      elif element.is_file():
-        print("|" * DIR_LVL, "-", f"[DATEI]  {element.name}")
+class Room:
+    def __init__(self, path):
+        self.path = path
+        self.exits = {}     # Name des Unterordners -> Room
+        self.enemies = []   # Dateien in diesem Raum
+        self.build_rooms()
 
-def go_room(room):
-   current_player_room = room
-   return read_folder(current_player_room)
+    def build_rooms(self):
+        for element in self.path.iterdir():
+            if element.is_dir():
+                next_path = self.path / f"{element.name}"
+                new_exit = Room(next_path)
+                self.exits[element.name] = new_exit
+            elif element.is_file():
+                self.enemies.append(element)
 
-def read_folder(path):
-   for element in path.iterdir():
-         if element.is_dir():
-           print("|" * DIR_LVL, "-", f"[ODNER]  {element.name}")
-         elif element.is_file():
-           print("|" * DIR_LVL, "-", f"[DATEI]  {element.name}")
+    def draw_room(self):
+        for element in self.path.iterdir():
+            if element.is_dir():
+                print(f"[ODNER]  {element.name}")
+            elif element.is_file():
+                print(f"[DATEI]  {element.name}")
+
+current_player_room = Room(PATH)
 
 while running:
-   print(current_player_room)
-   read_folder(current_player_room)
+   current_player_room.draw_room()
    player_command = input("Was ist ihr nächster Zug?:")
    player_command = player_command.split()
    match player_command[0]:
       case "gehe":
-        match player_command[1]:
-           case "Raum1":
-              current_player_room = PATH / "1.raum"
+        if player_command[1] in current_player_room.exits:
+            current_player_room = current_player_room.exits[player_command[1]]
