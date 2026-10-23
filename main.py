@@ -53,5 +53,10 @@ while running:
                 clear()
             else:
                 print("Das ist kein gültiger Ausgang.")
+        case "angreifen":
+            if player_command[1] in current_player_room.enemies:
+               print(f"Greife {current_player_room.enemies[player_command[1]].name} an")
+            else:
+                print("Das ist kein gültiger Angriff.")
         case _:
            print("Das ist kein gültiger Befehl.")
