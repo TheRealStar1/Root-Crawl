@@ -14,7 +14,14 @@ class Enemy:
         self.path = path
         self.file_size = os.path.getsize(self.path)
         self.health = self.file_size * 0.1
+        self.damage = 20
         self.typ = None
+
+class Player:
+    def __init__(self, start_room):
+        self.current_room = start_room
+        self.health = 200
+        self.damage = 20
 
 class Room:
     def __init__(self, path, parent=None, name=None):
@@ -38,31 +45,32 @@ class Room:
         for name in self.enemies:
             print(f"[Enemy]  {name} HP: {self.enemies[name].health}")
 
-current_player_room = Room(PATH, name="test_dungeon")
+player= Player(Room(PATH, name="test_dungeon"))
+player.current_room
 
 while running:
-    current_player_room.draw_room()
+    player.current_room.draw_room()
     player_command = input("What is your next move? ").split()
     if not player_command:
         continue
 
     match player_command[0]:
         case "go":
-            if len(player_command) > 1 and player_command[1] in current_player_room.exits:
-                current_player_room = current_player_room.exits[player_command[1]]
+            if len(player_command) > 1 and player_command[1] in player.current_room.exits:
+                player.current_room = player.current_room.exits[player_command[1]]
                 clear()
                 print(f"Entered {player_command[1]}:")
             else:
                 print("That is not a valid exit.")
         case "attack":
-            if len(player_command) > 1 and player_command[1] in current_player_room.enemies:
-                print(f"Attacking {current_player_room.enemies[player_command[1]].name}")
+            if len(player_command) > 1 and player_command[1] in player.current_room.enemies:
+                print(f"Attacking {player.current_room.enemies[player_command[1]].name}")
             else:
                 print("That is not a valid attack.")
         case "back":
-            if current_player_room.parent:
-                current_player_room = current_player_room.parent
+            if player.current_room.parent:
+                player.current_room = player.current_room.parent
                 clear()
-                print(f"Entered {current_player_room.name}")
+                print(f"Entered {player.current_room.name}")
         case _:
             print("That is not a valid command.")
