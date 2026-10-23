@@ -9,9 +9,11 @@ def clear():
     os.system("cls" if os.name == "nt" else "clear")
 
 class Enemy:
-    def __init__(self, name):
+    def __init__(self, name, path):
         self.name = name
-        self.health = 100
+        self.path = path
+        self.file_size = os.path.getsize(self.path)
+        self.health = self.file_size * 0.1
         self.typ = None
 
 class Room:
@@ -28,13 +30,13 @@ class Room:
             if element.is_dir():
                 self.exits[element.name] = Room(element, parent=self, name=element.name)
             elif element.is_file():
-                self.enemies[element.name] = Enemy(element.name)
+                self.enemies[element.name] = Enemy(element.name, element)
 
     def draw_room(self):
         for name in self.exits:
             print(f"[Exit]  {name}")
         for name in self.enemies:
-            print(f"[Enemy]  {name}")
+            print(f"[Enemy]  {name} HP: {self.enemies[name].health}")
 
 current_player_room = Room(PATH, name="test_dungeon")
 
