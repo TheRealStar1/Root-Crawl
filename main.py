@@ -6,16 +6,16 @@ PATH = Path("root-crawl/test_dungeon")
 DIR_LVL = 1
 
 class Enemy:
-    def __init__(self):
-        self.name = ""
+    def __init__(self, name):
+        self.name = name
         self.health = 100
-        self.typ
+        self.typ = None
 
 class Room:
     def __init__(self, path):
         self.path = path
         self.exits = {}     # Name des Unterordners -> Room
-        self.enemies = []   # Dateien in diesem Raum
+        self.enemies = {}   # Dateien in diesem Raum
         self.build_rooms()
 
     def build_rooms(self):
@@ -25,7 +25,8 @@ class Room:
                 new_exit = Room(next_path)
                 self.exits[element.name] = new_exit
             elif element.is_file():
-                self.enemies.append(element)
+                new_enemie = Enemy(element.name)
+                self.enemies[element.name] = new_enemie
 
     def draw_room(self):
         for element in self.path.iterdir():
