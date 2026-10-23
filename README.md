@@ -36,7 +36,7 @@ The game starts in the included `test_dungeon` folder, so you can try it out saf
 
 - [x] Rooms and exits built from real folders
 - [x] Moving between rooms
-- [ ] `back` command to leave a room
+- [x] `back` command to leave a room
 - [ ] Turn-based combat (file size = health, file type = enemy type)
 - [ ] Loot, inventory and levels
 - [ ] Boss per room (largest file)
