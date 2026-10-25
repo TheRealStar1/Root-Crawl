@@ -36,6 +36,8 @@ class Player:
                 
                 if self.health <= 0:
                     self.is_alive = False
+    def dead(self):
+        print("You are dead.")
 
 class Room:
     def __init__(self, path, parent=None, name=None):
@@ -67,8 +69,14 @@ def fight(player, enemy):
         enemy.take_damage(player.damage)
         player.take_damage(enemy.damage)
         time.sleep(0.5)
+    if enemy.is_alive == False:
+        clear()
+        print("Defeted Enemy")
+    if player.is_alive == False:
+        player.dead()
 
-player= Player(Room(PATH, name="test_dungeon"))
+
+player = Player(Room(PATH, name="test_dungeon"))
 player.current_room
 
 if __name__ == "__main__":
