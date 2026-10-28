@@ -38,6 +38,14 @@ class Player:
                     self.is_alive = False
     def dead(self):
         print("You are dead.")
+        
+    def change_room(self, player_command):
+        if len(player_command) > 1 and player_command[1] in player.current_room.exits:
+            player.current_room = player.current_room.exits[player_command[1]]
+            clear()
+            print(f"Entered {player_command[1]}:")
+        else:
+            print("That is not a valid exit.")
 
 class Room:
     def __init__(self, path, parent=None, name=None):
@@ -88,12 +96,7 @@ if __name__ == "__main__":
 
         match player_command[0]:
             case "go":
-                if len(player_command) > 1 and player_command[1] in player.current_room.exits:
-                    player.current_room = player.current_room.exits[player_command[1]]
-                    clear()
-                    print(f"Entered {player_command[1]}:")
-                else:
-                    print("That is not a valid exit.")
+                player.change_room(player_command)
             case "attack":
                 if len(player_command) > 1 and player_command[1] in player.current_room.enemies:
                     print(f"Attacking {player.current_room.enemies[player_command[1]].name}")
